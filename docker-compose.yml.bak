@@ -1,0 +1,38 @@
+version: '2.1'
+
+volumes:
+  mysql:
+    driver: local
+  phpmyadmin:
+    driver: local 
+
+services:
+  db:
+    image: webhippie/mariadb:latest
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=zjkoC]6p
+      - MARIADB_USERNAME=Mmysql
+      - MARIADB_PASSWORD=vpjk.shCyo8bf
+      - MARIADB_DATABASE=M-DB
+      - MARIADB_MAX_ALLOWED_PACKET=128M
+      - MARIADB_INNODB_LOG_FILE_SIZE=64M
+    healthcheck:
+      test: ["CMD", "/usr/bin/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - mysql:/var/lib/mysql
+
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '80:80'
+    environment:
+      PMA_HOST: db
+    volumes:
+      - phpmyadmin:/var/lib/phpmyadmin
